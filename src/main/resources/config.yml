@@ -1,0 +1,7 @@
+dataSource:
+#连接池地址
+  url: jdbc:mysql://localhost:25536/reezhu
+#连接池用户名
+  userName: reezhu
+#连接池密码
+  password: password

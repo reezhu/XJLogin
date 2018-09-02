@@ -1,0 +1,19 @@
+name: XJLogin
+main: org.xjcraft.login.XJLogin
+version: 1.0
+author: Ree
+
+
+commands:
+#    login:
+#        description: login <password>
+#        usage: use /login help
+#        aliases: [l]
+
+permissions:
+    permission.login:
+        description: Allow user to use login command
+        default: true
+    permission.check:
+        description: Allow user to use login command
+        default: op
