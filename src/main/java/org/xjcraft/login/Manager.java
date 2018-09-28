@@ -63,8 +63,7 @@ public class Manager {
                     account.setLastAction(new Timestamp(System.currentTimeMillis()));
                     account.setLoginFails(0);
                     if (!account.getIps().contains(ip)) {
-                        String[] ips = account.getIps().split(",");
-                        account.setIps(account.getIps() + (ips.length > 1 ? "," : "") + ip);
+                        account.setIps(account.getIps() + (account.getIps().length() > 0 ? "," : "") + ip);
                     }
                 } else {
                     if (account == null) return;
@@ -134,7 +133,7 @@ public class Manager {
         try {
 
             connection = source.getConnection();
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO `reezhu`.`CrazyLogin_accounts` " +
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO `CrazyLogin_accounts` " +
                     "( `name`, `password`, `ips`, `lastAction`, `loginFails`, `passwordExpired` ) VALUES " +
                     "( ?, ?, ?, ?, ?, ? )  ON DUPLICATE KEY UPDATE `password` = ?, `ips` =?, `lastAction` = ?, `loginFails` = ?, `passwordExpired` = ?;");
             statement.setString(1, account.getName());
