@@ -6,16 +6,17 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
-import org.xjcraft.login.command.CommandCheck;
 import org.xjcraft.login.command.CommandLogin;
 import org.xjcraft.login.command.CommandRegister;
+import org.xjcraft.login.listeners.LoginListener;
+import org.xjcraft.login.manager.impl.BungeeImpl;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 
-public class XJLogin extends Plugin {
+public class Bungee extends Plugin {
     @Override
     public void onEnable() {
         if (!getDataFolder().exists())
@@ -32,13 +33,12 @@ public class XJLogin extends Plugin {
         try {
             Configuration configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(getDataFolder(), "config.yml"));
             HikariDataSource hikariDataSource = new HikariDataSource(loadConfig(configuration));
-            Manager manager = new Manager(this, hikariDataSource);
+            BungeeImpl manager = new BungeeImpl(this, hikariDataSource);
             getProxy().getPluginManager().registerListener(this, new LoginListener(this, manager));
             getProxy().getPluginManager().registerCommand(this, new CommandLogin("login", manager));
             getProxy().getPluginManager().registerCommand(this, new CommandLogin("l", manager));
             getProxy().getPluginManager().registerCommand(this, new CommandRegister("register", manager));
             getProxy().getPluginManager().registerCommand(this, new CommandRegister("r", manager));
-            getProxy().getPluginManager().registerCommand(this, new CommandCheck(manager));
         } catch (IOException e) {
             e.printStackTrace();
         }

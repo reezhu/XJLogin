@@ -1,0 +1,11 @@
+name: XJLogin
+main: org.xjcraft.login.Spigot
+version: 1.0
+author: Ree
+
+
+commands:
+    xl:
+        description: all the xl command
+        usage: use /xl help
+        aliases: []

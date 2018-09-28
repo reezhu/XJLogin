@@ -3,12 +3,12 @@ package org.xjcraft.login.command;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import org.xjcraft.login.Manager;
+import org.xjcraft.login.manager.impl.BungeeImpl;
 
 public class CommandRegister extends Command {
-    private Manager manager;
+    private BungeeImpl manager;
 
-    public CommandRegister(String name, Manager manager) {
+    public CommandRegister(String name, BungeeImpl manager) {
         super(name);
         this.manager = manager;
     }

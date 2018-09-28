@@ -25,4 +25,5 @@ public class Account {
         this.loginFails = 0;
         this.passwordExpired = false;
     }
+
 }
