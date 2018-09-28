@@ -119,12 +119,12 @@ public class SpigotImpl extends Manager implements CommandExecutor, TabCompleter
     }
 
     private boolean help(CommandSender commandSender) {
-        commandSender.sendMessage("/xl help");
-        commandSender.sendMessage("/xl chgpw|register|r <password>");
+        commandSender.sendMessage("/xl help 帮助");
+        commandSender.sendMessage("/xl chgpw|register|r <password> 修改密码");
         if (commandSender.isOp()) {
-            commandSender.sendMessage("/xl create <player> <password>");
-            commandSender.sendMessage("/xl edit <player> <password>");
-            commandSender.sendMessage("/xl status <player> ");
+            commandSender.sendMessage("/xl create <player> <password> 创建用户");
+            commandSender.sendMessage("/xl edit <player> <password> 修改用户密码");
+            commandSender.sendMessage("/xl status <player> 查看用户");
         }
         return true;
     }
