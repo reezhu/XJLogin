@@ -1,7 +1,4 @@
-import org.junit.Test;
-
 public class SyncTest {
-    @Test
     public void main() {
         for (int i = 0; i < 2; i++) {
             Thread thread = new Thread(new TestThread());
