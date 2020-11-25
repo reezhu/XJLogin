@@ -28,7 +28,20 @@ public class BungeeImpl extends Manager {
 
             if (validAccount(player, args[0], account)) {
                 String ip = player.getAddress().getHostString();
-                sendPlayer(player);
+                Integer playerType = account.getPlayerType();
+
+                if (playerType == null)
+                    sendPlayer(player, "main");
+                else {
+                    switch (playerType) {
+                        case 1:
+                            sendPlayer(player, "official");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
                 account.setLastAction(new Timestamp(System.currentTimeMillis()));
                 account.setLoginFails(0);
                 if (!account.getIps().contains(ip)) {
@@ -45,8 +58,8 @@ public class BungeeImpl extends Manager {
 
     }
 
-    private void sendPlayer(ProxiedPlayer player) {
-        ServerInfo target = ProxyServer.getInstance().getServerInfo("main");
+    private void sendPlayer(ProxiedPlayer player, String server) {
+        ServerInfo target = ProxyServer.getInstance().getServerInfo(server);
         player.connect(target);
     }
 
@@ -65,7 +78,7 @@ public class BungeeImpl extends Manager {
             account = new Account(player.getName(), args[0]);
             updateAccount(account);
             player.sendMessage(ChatColor.YELLOW + "注册成功，即将转移……");
-            sendPlayer(player);
+            sendPlayer(player, "main");
 
         });
 

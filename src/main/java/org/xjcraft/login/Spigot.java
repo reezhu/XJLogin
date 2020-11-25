@@ -20,7 +20,9 @@ public class Spigot extends JavaPlugin {
         }
         FileConfiguration config = getConfig();
         saveConfig();
-
+        System.out.println(HikariConfig.class.getClassLoader());
+        System.out.println(HikariDataSource.class.getClassLoader());
+        System.out.println(this.getClassLoader());
         HikariDataSource hikariDataSource = new HikariDataSource(loadConfig(config));
         SpigotImpl manager = new SpigotImpl(this, hikariDataSource);
         getCommand("xl").setExecutor(manager);

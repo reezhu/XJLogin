@@ -16,6 +16,8 @@ public class Account {
     Timestamp lastAction;
     Integer loginFails;
     Boolean passwordExpired;
+    Integer playerType;
+    String inviter;
 
     public Account(String name, String password) {
         this.name = name;

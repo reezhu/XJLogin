@@ -45,19 +45,23 @@ public class Manager {
         try (Connection connection = source.getConnection()) {
 
             PreparedStatement statement = connection.prepareStatement("INSERT INTO `CrazyLogin_accounts` " +
-                    "( `name`, `password`, `ips`, `lastAction`, `loginFails`, `passwordExpired` ) VALUES " +
-                    "( ?, ?, ?, ?, ?, ? )  ON DUPLICATE KEY UPDATE `password` = ?, `ips` =?, `lastAction` = ?, `loginFails` = ?, `passwordExpired` = ?;");
+                    "( `name`, `password`, `ips`, `lastAction`, `loginFails`, `passwordExpired`, `playerType`, `inviter` ) VALUES " +
+                    "( ?, ?, ?, ?, ?, ? , ?, ? )  ON DUPLICATE KEY UPDATE `password` = ?, `ips` =?, `lastAction` = ?, `loginFails` = ?, `passwordExpired` = ?, `playerType` = ?, `inviter` = ?;");
             statement.setString(1, account.getName());
             statement.setString(2, account.getPassword());
             statement.setString(3, account.getIps());
             statement.setTimestamp(4, account.getLastAction());
             statement.setInt(5, account.getLoginFails());
             statement.setBoolean(6, account.getPasswordExpired());
-            statement.setString(7, account.getPassword());
-            statement.setString(8, account.getIps());
-            statement.setTimestamp(9, account.getLastAction());
-            statement.setInt(10, account.getLoginFails());
-            statement.setBoolean(11, account.getPasswordExpired());
+            statement.setInt(7, account.getPlayerType());
+            statement.setString(8, account.getInviter());
+            statement.setString(9, account.getPassword());
+            statement.setString(10, account.getIps());
+            statement.setTimestamp(11, account.getLastAction());
+            statement.setInt(12, account.getLoginFails());
+            statement.setBoolean(13, account.getPasswordExpired());
+            statement.setInt(14, account.getPlayerType());
+            statement.setString(15, account.getInviter());
             statement.execute();
 
         } catch (SQLException e) {
@@ -78,7 +82,9 @@ public class Manager {
                         resultSet.getString("ips"),
                         resultSet.getTimestamp("lastAction"),
                         resultSet.getInt("loginFails"),
-                        resultSet.getBoolean("passwordExpired")
+                        resultSet.getBoolean("passwordExpired"),
+                        resultSet.getInt("playerType"),
+                        resultSet.getString("inviter")
                 );
             }
         } catch (SQLException e) {

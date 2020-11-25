@@ -2,6 +2,7 @@ name: XJLogin
 main: org.xjcraft.login.Spigot
 version: 1.0
 author: Ree
+softdepend: [ SimpleSpigot ]
 
 
 commands:

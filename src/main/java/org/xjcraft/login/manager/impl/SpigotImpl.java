@@ -15,10 +15,12 @@ import org.xjcraft.login.manager.Manager;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class SpigotImpl extends Manager implements CommandExecutor, TabCompleter {
     private Plugin plugin;
     List<String> names;
+    private boolean isMainServer = false;
 
     public SpigotImpl(Plugin plugin, HikariDataSource source) {
         super(source);
@@ -32,7 +34,7 @@ public class SpigotImpl extends Manager implements CommandExecutor, TabCompleter
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (args.length == 0 || "help".equalsIgnoreCase(args[0])) {
             return help(sender);
-        } else if (sender.isOp()) {
+        } else if (sender.isOp() && isMainServer) {
             switch (args[0]) {
 
                 case "create":
@@ -56,10 +58,15 @@ public class SpigotImpl extends Manager implements CommandExecutor, TabCompleter
                 if (args.length > 1)
                     plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> changePassword(sender, args));
                 return true;
+            case "invite":
+                if (args.length > 1)
+                    plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> invite(sender, args));
+                return true;
 
         }
         return false;
     }
+
 
     private void editAccount(CommandSender sender, String[] args) {
         String name = args[1];
@@ -111,6 +118,28 @@ public class SpigotImpl extends Manager implements CommandExecutor, TabCompleter
         }
     }
 
+    private void invite(CommandSender sender, String[] args) {
+        String name = args[1];
+        Account inviter = getAccount(sender.getName());
+        if (inviter.getPlayerType() != 1) {
+            sender.sendMessage(ChatColor.YELLOW + "仅XJ建筑服可用");
+            return;
+        }
+
+        Account account = getAccount(name);
+        if (account != null) {
+            sender.sendMessage(ChatColor.YELLOW + "玩家已存在!");
+            return;
+        }
+        long l = new Random(System.currentTimeMillis()).nextLong();
+        account = new Account(name, l + "");
+        account.setPlayerType(1);
+        account.setInviter(sender.getName());
+        updateAccount(account);
+        names.add(name);
+        sender.sendMessage(ChatColor.YELLOW + "创建成功!密码为：" + l + "请提醒被邀请者及时更新密码！");
+    }
+
     private void changePassword(String name, String passwrod) {
         Account account = getAccount(name);
         if (account == null) return;
@@ -121,7 +150,8 @@ public class SpigotImpl extends Manager implements CommandExecutor, TabCompleter
     private boolean help(CommandSender commandSender) {
         commandSender.sendMessage("/xl help 帮助");
         commandSender.sendMessage("/xl chgpw|register|r <password> 修改密码");
-        if (commandSender.isOp()) {
+        commandSender.sendMessage("/xl invite <name> 邀请玩家（仅XJ建筑服可用！）");
+        if (commandSender.isOp() && isMainServer) {
             commandSender.sendMessage("/xl create <player> <password> 创建用户");
             commandSender.sendMessage("/xl edit <player> <password> 修改用户密码");
             commandSender.sendMessage("/xl status <player> 查看用户");
@@ -139,7 +169,8 @@ public class SpigotImpl extends Manager implements CommandExecutor, TabCompleter
                 list.add("chgpw");
                 list.add("r");
                 list.add("register");
-                if (commandSender.isOp()) {
+                list.add("invite");
+                if (commandSender.isOp() && isMainServer) {
                     list.add("create");
                     list.add("status");
                     list.add("edit");
@@ -175,6 +206,10 @@ public class SpigotImpl extends Manager implements CommandExecutor, TabCompleter
                     case "register":
                         return new ArrayList<String>() {{
                             add("password");
+                        }};
+                    case "invite":
+                        return new ArrayList<String>() {{
+                            add("playerName");
                         }};
                 }
             case 3:
